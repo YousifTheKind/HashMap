@@ -168,8 +168,7 @@ class Node {
 }
 
 const HashMap = () => {
-    let mapSize = 16;
-    let buckets = new Array(mapSize);
+    let buckets = new Array(16);
 
     function hash(key) {
         let hashCode = 0;
@@ -204,6 +203,14 @@ const HashMap = () => {
         }
 
         //implement code that grows the bucket here
+        const growthFactor = Math.ceil(0.75 * buckets.length);
+        const e = this.entries();
+        if (length() == growthFactor) {
+            buckets = new Array(buckets.length * 2);
+            e.forEach((entry) => {
+                this.set(entry[0], entry[1]);
+            });
+        }
     }
     function getBuckets() {
         return buckets;
@@ -245,7 +252,7 @@ const HashMap = () => {
     }
 
     function clear() {
-        buckets = new Array(mapSize);
+        buckets = new Array(buckets.length);
     }
     function keys() {
         const filteredBuckets = buckets.filter(
@@ -292,6 +299,9 @@ const HashMap = () => {
         });
         return keyValuePairArray;
     }
+    function getLength() {
+        return buckets.length;
+    }
     return {
         hash,
         set,
@@ -304,22 +314,6 @@ const HashMap = () => {
         keys,
         values,
         entries,
+        getLength,
     };
 };
-
-const map = HashMap();
-console.log(map.hash("a"));
-console.log(map.set("yousif", "32"));
-console.log(map.set("yousif", "23"));
-console.log(map.set("a", "55"));
-console.log(map.getBuckets());
-console.log(map.get("youif"));
-console.log(map.has("youif"));
-console.log(map.remove("yousif"));
-console.log(map.set("yasser", "34"));
-console.log(map.set("yousif", "23"));
-console.log(map.length());
-console.log(map.getBuckets());
-console.log(map.keys());
-console.log(map.values());
-console.log(map.entries());
