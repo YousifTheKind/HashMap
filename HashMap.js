@@ -168,7 +168,8 @@ class Node {
 }
 
 const HashMap = () => {
-    const buckets = new Array(16);
+    let mapSize = 16;
+    let buckets = new Array(mapSize);
 
     function hash(key) {
         let hashCode = 0;
@@ -242,7 +243,25 @@ const HashMap = () => {
         });
         return totalKeys;
     }
-    return { hash, set, getBuckets, get, has, remove, length };
+
+    function clear() {
+        buckets = new Array(mapSize);
+    }
+    function keys() {
+        const filteredBuckets = buckets.filter(
+            (bucket) => bucket !== undefined
+        );
+        const keysArray = [];
+        filteredBuckets.forEach((list) => {
+            let i = 0;
+            while (list.at(i)) {
+                keysArray.push(list.at(i).key);
+                i++;
+            }
+        });
+        return keysArray;
+    }
+    return { hash, set, getBuckets, get, has, remove, length, clear, keys };
 };
 
 const map = HashMap();
@@ -258,3 +277,4 @@ console.log(map.set("yasser", "34"));
 console.log(map.set("yousif", "23"));
 console.log(map.length());
 console.log(map.getBuckets());
+console.log(map.keys());
