@@ -22,7 +22,7 @@ class LinkedList {
     get size() {
         if (this.#head == null) return "List is Empty!";
 
-        let counter = 0;
+        let counter = 1;
         let temp = this.#head;
         while (temp.nextNode != null) {
             counter++;
@@ -134,16 +134,22 @@ class LinkedList {
         if (index < 0 || index > this.size) {
             return `index should be between 0 and ${this.size}`;
         }
+        // if removing the head
+        if (index == 0) {
+            this.#head = this.#head.nextNode;
+            return;
+        }
         let curr = this.#head;
         let prev = null;
         let counter = 0;
+
         // if there is only one element
         if (curr == this.tail) {
             this.pop();
             return;
         }
-
         while (curr !== null && counter !== index) {
+            console.log(prev);
             counter++;
             prev = curr;
             curr = curr.nextNode;
@@ -189,7 +195,6 @@ const HashMap = () => {
             // We have collision
             else {
                 existingList.append(key, value);
-                return existingList.toString();
             }
         } else if (buckets[index] == undefined) {
             buckets[index] = new LinkedList();
@@ -207,10 +212,37 @@ const HashMap = () => {
         if (buckets[index]) {
             const indexOfKeyInsideList = buckets[index].find(key);
             return buckets[index].at(indexOfKeyInsideList).value;
-        } else null;
+        } else return null;
     }
 
-    return { hash, set, getBuckets, get };
+    function has(key) {
+        const value = get(key);
+        if (value != null) return true;
+        else return false;
+    }
+
+    function remove(key) {
+        const keyExists = has(key);
+        if (keyExists) {
+            const indexInHashMap = hash(key);
+            const indexInLinkedList = buckets[indexInHashMap].find(key);
+            buckets[indexInHashMap].removeAt(indexInLinkedList);
+
+            return true;
+        } else return false;
+    }
+    function length() {
+        const filteredBuckets = buckets.filter(
+            (bucket) => bucket !== undefined
+        );
+        let totalKeys = 0;
+
+        filteredBuckets.forEach((list) => {
+            totalKeys += list.size;
+        });
+        return totalKeys;
+    }
+    return { hash, set, getBuckets, get, has, remove, length };
 };
 
 const map = HashMap();
@@ -219,4 +251,10 @@ console.log(map.set("yousif", "32"));
 console.log(map.set("yousif", "23"));
 console.log(map.set("a", "55"));
 console.log(map.getBuckets());
-console.log(map.get("yousif"));
+console.log(map.get("youif"));
+console.log(map.has("youif"));
+console.log(map.remove("yousif"));
+console.log(map.set("yasser", "34"));
+console.log(map.set("yousif", "23"));
+console.log(map.length());
+console.log(map.getBuckets());
