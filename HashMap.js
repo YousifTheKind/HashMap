@@ -261,7 +261,50 @@ const HashMap = () => {
         });
         return keysArray;
     }
-    return { hash, set, getBuckets, get, has, remove, length, clear, keys };
+    function values() {
+        const filteredBuckets = buckets.filter(
+            (bucket) => bucket !== undefined
+        );
+        const valuesArray = [];
+        filteredBuckets.forEach((list) => {
+            let i = 0;
+            while (list.at(i)) {
+                valuesArray.push(list.at(i).value);
+                i++;
+            }
+        });
+        return valuesArray;
+    }
+    function entries() {
+        const filteredBuckets = buckets.filter(
+            (bucket) => bucket !== undefined
+        );
+        const keyValuePairArray = [];
+        filteredBuckets.forEach((list) => {
+            let i = 0;
+            while (list.at(i)) {
+                const pair = [];
+                pair.push(list.at(i).key);
+                pair.push(list.at(i).value);
+                keyValuePairArray.push(pair);
+                i++;
+            }
+        });
+        return keyValuePairArray;
+    }
+    return {
+        hash,
+        set,
+        getBuckets,
+        get,
+        has,
+        remove,
+        length,
+        clear,
+        keys,
+        values,
+        entries,
+    };
 };
 
 const map = HashMap();
@@ -278,3 +321,5 @@ console.log(map.set("yousif", "23"));
 console.log(map.length());
 console.log(map.getBuckets());
 console.log(map.keys());
+console.log(map.values());
+console.log(map.entries());
